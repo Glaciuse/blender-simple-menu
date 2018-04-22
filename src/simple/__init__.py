@@ -16,25 +16,28 @@ bl_info = {
 
 class Settings:
     @staticmethod
-    def root_menu_icon(obj=None):
-        if isinstance(obj, str):  # Add condition for custom icon for specific object
+    def root_menu_icon(id_str=None):
+        if id_str == 'simple':               # Add condition for custom icon for specific object
             return 'MOD_SCREW'
         return 'MOD_SCREW'
 
     @staticmethod
     def root_menu_name():
-        return __name__           # Change this name for specific root menu name
+        # Change this name for specific root menu name
+        return __name__
 
     @staticmethod
-    def menu_icon(obj=None):
-        if isinstance(obj, str):  # Add condition for custom icon for specific object
-            return 'FILE_FOLDER'
+    def menu_icon(id_str=None):
+        if id_str == 'simple.menu.example':  # Add condition for custom icon for specific object
+            return 'FILESEL'
         return 'FILE_FOLDER'
 
     @staticmethod
-    def operator_icon(obj=None):
-        if isinstance(obj, str):  # Add condition for custom icon for specific object
-            return 'IPO_EASE_IN_OUT'
+    def operator_icon(id_str=None):
+        if id_str == 'simple.Cylinder':      # Add condition for custom icon for specific object
+            return 'MOD_SHRINKWRAP'
+        elif id_str == 'simple.menu.example.Monkey':
+            return 'IPO'
         return 'IPO_EASE_IN_OUT'
 
 
@@ -167,7 +170,7 @@ class Menu(Entry):
             if not submenu_name:
                 submenu_name = module.__name__.replace(self._name + '.', '')
                 submenu.entry.bl_label = submenu_name
-            self.entry.add_submenu(self.entry, submenu.entry, submenu_name)
+            self.entry.add_submenu(self.entry, submenu.entry, module.__name__, submenu_name)
 
         for cl in entries['classes']:
             if issubclass(cl, bpy.types.Operator):
@@ -177,11 +180,11 @@ class Menu(Entry):
                 if not operator_name:
                     operator_name = cl.__name__.replace(self._name + '.', '')
                     suboperator.entry.bl_label = operator_name
-                self.entry.add_operator(self.entry, suboperator.entry, operator_name)
+                self.entry.add_operator(self.entry, suboperator.entry, self._name + '.' + cl.__name__, operator_name)
 
     def menu(self, bpy_self, context):
         if self.entry:
-            bpy_self.layout.menu(self.entry.bl_idname, text=self.entry.bl_label, icon=Settings.root_menu_icon(self))
+            bpy_self.layout.menu(self.entry.bl_idname, text=self.entry.bl_label, icon=Settings.root_menu_icon(self._name))
 
     @IndentedLogger
     def register(self):
@@ -214,17 +217,17 @@ class Menu(Entry):
             layout.operator_context = 'INVOKE_REGION_WIN'
 
             for menu in self.menus:
-                layout.menu(menu['object'].bl_idname, text=menu['text'], icon=Settings.menu_icon(menu['object']))
+                layout.menu(menu['object'].bl_idname, text=menu['text'], icon=Settings.menu_icon(menu['id']))
 
             for operator in self.operators:
                 opid = operator['object'].bl_idname
-                layout.operator(opid, text=operator['text'], icon=Settings.operator_icon(operator['object']))
+                layout.operator(opid, text=operator['text'], icon=Settings.operator_icon(operator['id']))
 
-        def add_submenu(self, bl_id, label):
-            self.menus.append({'object': bl_id, 'text': label})
+        def add_submenu(self, bl_id, id_str, label):
+            self.menus.append({'object': bl_id, 'id': id_str, 'text': label})
 
-        def add_operator(self, bl_id, label):
-            self.operators.append({'object': bl_id, 'text': label})
+        def add_operator(self, bl_id, id_str, label):
+            self.operators.append({'object': bl_id, 'id': id_str, 'text': label})
 
         menu_type.draw = draw
         menu_type.add_submenu = add_submenu
