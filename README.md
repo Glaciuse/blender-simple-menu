@@ -46,7 +46,3 @@ C:\Users\%username%\AppData\Roaming\Blender Foundation\Blender\blender-version\s
 ## New features
 
 Make a request!
-
-## Licence
-
-MIT
