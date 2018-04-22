@@ -8,8 +8,8 @@ How it looks like:
 
 ## Overview
 
-This plugin consists of only one file: __init__.py
-To run this plugin you need to create folder with any name in blender's plugin directory and put this __init__.py file to it.
+This plugin consists of only one file: `__init__.py`
+To run this plugin you need to create folder with any name in blender's plugin directory and put this `__init__.py` file to it.
 After that you can create any classes/modules in that folder and plugin automatically will find all Operators and put them to menu.
 
 ## Getting Started
@@ -35,11 +35,11 @@ C:\Users\%username%\AppData\Roaming\Blender Foundation\Blender\blender-version\s
 
 ## Some settings
 
-1. Change your meshes collection name and author in bl_info located in the __init__.py file
+1. Change your meshes collection name and author in bl_info located in the `__init__.py` file
 
 ![Alt text](doc/bl-info.png?raw=true "bl_info")
 
-2. You can change the name of root menu or add custom icons for your operators by adding Settings class in __init__.py file
+2. You can change the name of root menu or add custom icons for your operators by adding Settings class in `__init__.py` file
 
 ![Alt text](doc/plugin-settings.png?raw=true "Plugin settings")
 
